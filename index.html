@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="pyScript/pyscriptCSS.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <script src="shh.js"></script>
+    <link rel="stylesheet/less" type="text/css" href="emojiStyle.less" />
+    <script src="https://cdn.jsdelivr.net/npm/less" ></script>
+
+    <!-- ⪢⪢⪢ FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Proza+Libre&display=swap" rel="stylesheet">
+</head>
+<body>
+<img src="gallery/header.svg" id="header" alt="oh">
+<img src="gallery/mainTxt.webp" id="mainTxt" alt="oh no, imagine I'm like text">
+<!-- ⪢⪢⪢ Fake divs for scroll-snap-->
+<div class="snap"></div>
+
+<!-- ⪢⪢⪢ Temp displays-->
+<div id="prompt"></div>
+<div id="completion"></div>
+
+<!-- ⪢⪢⪢ First (main page) form-->
+<form id="mainForm">
+    <textarea id="emojify" name="main"></textarea><br><br>
+    <img src="gallery/txtBox.svg" id="formBg" alt="pretend like this didn't happen and this a textbox, also contact if me if broke that badly">
+</form>
+
+<!-- ⪢⪢⪢ Main transfer button -->
+<button py-click="passTxt()" id="mainButton" class="py-button"></button>
+<h1>emojify!</h1>
+
+<!-- ⪢⪢⪢ Conversion script (first one) -->
+<script>
+    mainButton = document.getElementById("mainButton")
+    theForm = document.getElementById("emojify")
+
+    mainButton.addEventListener("click", () => {
+        thePrompt = theForm.value
+        return thePrompt
+    })
+</script>
+
+<!-- ⪢⪢⪢ Responsive script for text menu -->
+<script>
+    form = document.getElementById("mainForm");
+    formImage = document.getElementById("formBg");
+    formInput = document.getElementById("emojify");
+
+    function sizeChangeForm() {
+        const dimInput = formInput.getBoundingClientRect()
+
+        formInput.style.width = formImage.offsetWidth*0.97 + "px"
+        formInput.style.right = dimInput.right + dimInput.right*0.15 + "px"
+
+        formInput.style.height = formImage.offsetHeight*0.88 + "px"
+        formInput.style.bottom = dimInput.bottom + dimInput.bottom*0.06 + "px"
+    }
+
+    addEventListener("resize", sizeChangeForm)
+    addEventListener("load", sizeChangeForm)
+</script>
+
+<!--⪢⪢⪢ Ignore me -->
+<py-script>
+import json
+import time
+from js import localStorage, document, console, XMLHttpRequest
+
+def passTxt():
+    time.sleep(1)
+    from js import thePrompt
+
+    bearer = "Bearer " + localStorage.getItem("openAI")
+
+    promptDiv = document.getElementById("prompt")
+    promptDiv.innerHTML = "<h3>Prompt: </h3>\"" + thePrompt + "\"<hr/>"
+
+    engine = "text-davinci-003"
+
+    xhr = XMLHttpRequest.new()
+    xhr.open("POST", "https://api.openai.com/v1/completions", False)
+    xhr.setRequestHeader("Content-Type", "application/json")
+    xhr.setRequestHeader("Authorization", bearer)
+
+    theNeatPrompt = f'You are a program that converts text into emoji. You are not permitted to use text characters. Do not write any text, just emojies. Again, you are not permitted to use any characters other than emoji even for comment. \n For example: "Crab ate a sock an appeared on an island in India under green sun" you convert it to "🦀🍽️🧦🏝️🇮🇳🌞" \n Now turn this into emoji: {thePrompt}'
+
+    data = json.dumps({
+        "model": engine,
+        "prompt": theNeatPrompt,
+        "max_tokens": 1000,
+        "temperature": 0.3,
+        "top_p": 0.3,
+        "frequency_penalty": 1.2,
+        "presence_penalty": 1
+    })
+
+    xhr.send(data)
+
+    json_response = json.loads(xhr.response)
+    completion_text = json_response['choices'][0]['text']
+    console.log("Colors: " + completion_text)
+
+    completionDiv = document.getElementById("completion")
+    completionDiv.innerHTML = "<h3>OpenAI (" + engine + ") Response: </h3>\"" + completion_text.strip() + "\""
+</py-script>
+</body>
+</html>
