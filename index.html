@@ -13,39 +13,106 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Proza+Libre&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="gallery/favicon.png">
 </head>
 <body>
-<img src="gallery/header.svg" id="header" alt="oh">
-<img src="gallery/mainTxt.webp" id="mainTxt" alt="oh no, imagine I'm like text">
-<!-- ⪢⪢⪢ Fake divs for scroll-snap-->
-<div class="snap"></div>
+<!-- ⪢⪢⪢ Header-->
+<div id="header">
+    <img src="gallery/mainLogo.svg" id="icon" alt="oh" draggable="false">
+    <ul>
+        <li id="contactText"><a href="">Contact</a></li>
+        <!-- Insert the contact page-->
+        <!--    Also a friendly reminder to add the arrow-->
+        <li id="nameText"><a href="index.html">AI-emojify</a></li>
+    </ul>
+</div>
 
-<!-- ⪢⪢⪢ Temp displays-->
-<div id="prompt"></div>
-<div id="completion"></div>
+<img src="gallery/mainTxt.webp" id="mainTxt" alt="oh no, imagine I'm like text">
+<!-- ⪢⪢⪢ Video-->
+<div id="animContainer">
+    <video id = "animBoxes">
+        <source src="gallery/video/Textbox%20squish.webm"
+                type="video/webm">
+    </video>
+</div>
 
 <!-- ⪢⪢⪢ First (main page) form-->
-<form id="mainForm">
+<div id="mainForm">
     <textarea id="emojify" name="main"></textarea><br><br>
     <img src="gallery/txtBox.svg" id="formBg" alt="pretend like this didn't happen and this a textbox, also contact if me if broke that badly">
-</form>
+    <img src="gallery/caret.svg" id="caret" alt="I am a blinking caret. Blink blink.">
+</div>
+<!-- ⪢⪢⪢ Mini formies-->
+<div id="miniForm1">
+    <textarea id="emojifyMini1" name="main" readonly></textarea><br><br>
+    <img src="gallery/txtBoxSmall.svg" id="formBgMini1" alt="pretend like this didn't happen and this a textbox, also contact if me if broke that badly">
+    <img src="gallery/caret.svg" id="caretMini1" alt="I am a blinking caret. Blink blink.">
+</div>
+
+<div id="miniForm2">
+    <textarea id="emojifyMini2" name="main" readonly></textarea><br><br>
+    <img src="gallery/txtBoxSmall.svg" id="formBgMini2" alt="pretend like this didn't happen and this a textbox, also contact if me if broke that badly">
+    <img src="gallery/caret.svg" id="caretMini2" alt="I am a blinking caret. Blink blink.">
+</div>
 
 <!-- ⪢⪢⪢ Main transfer button -->
 <button py-click="passTxt()" id="mainButton" class="py-button"></button>
 <h1>emojify!</h1>
 
-<!-- ⪢⪢⪢ Conversion script (first one) -->
+<!-- ⪢⪢⪢ Conversion script (first one) + video box anim handler -->
 <script>
-    mainButton = document.getElementById("mainButton")
-    theForm = document.getElementById("emojify")
+    mainButton = document.getElementById("mainButton");
+    theForm = document.getElementById("emojify");
+    animVid = document.getElementById("animBoxes");
 
     mainButton.addEventListener("click", () => {
-        thePrompt = theForm.value
-        return thePrompt
+        if (localStorage.isOn === "true" || localStorage.isOn === undefined) {
+            // thePrompt = theForm.value
+            caretMini1.style.opacity = "0"
+            caretMini2.style.opacity = "0"
+
+            // return thePrompt
+        }
     })
+
+    mainButton.addEventListener("click", () => {
+        if (localStorage.isOn === "false") {
+            // thePrompt = formInputMini1.value
+            caretMini1.style.opacity = "0"
+            caretMini2.style.opacity = "0"
+
+            // return thePrompt
+        }
+    })
+
+    mainButton.addEventListener("click", () => {
+        if (localStorage.isOn === "true" || localStorage.isOn === undefined) {
+            delayedAppearance()
+        }
+        else {
+            console.log("You've already seen this animation")
+        }
+    })
+
+    function ifAlreadyClicked() {
+        if (localStorage.isOn === "false") {
+            form.style.display = "none";
+            formMini1.style.display = "initial"
+            formMini2.style.display = "initial"
+
+            caretMini1.style.animation = "caretBlink .5s alternate infinite"
+            caretMini2.style.animation = "caretBlink .5s alternate infinite"
+            console.log(caretMini1.style.animation)
+        }
+        else {
+            console.log("not replaced")
+        }
+    }
+
+    addEventListener("load", ifAlreadyClicked)
 </script>
 
-<!-- ⪢⪢⪢ Responsive script for text menu -->
+<!-- ⪢⪢⪢ Responsive script for text menu-->
 <script>
     form = document.getElementById("mainForm");
     formImage = document.getElementById("formBg");
@@ -54,21 +121,187 @@
     function sizeChangeForm() {
         const dimInput = formInput.getBoundingClientRect()
 
-        formInput.style.width = formImage.offsetWidth*0.97 + "px"
+        // The percentage is added in js because yes
+
+        formInput.style.width = formImage.offsetWidth*0.95 + "px"
         formInput.style.right = dimInput.right + dimInput.right*0.15 + "px"
+        // ^ the right one doesn't actually do anything but it better be just in case
+        // Probably because it's transformed in css
 
         formInput.style.height = formImage.offsetHeight*0.88 + "px"
         formInput.style.bottom = dimInput.bottom + dimInput.bottom*0.06 + "px"
+        form.style.height = formInput.style.height
     }
 
     addEventListener("resize", sizeChangeForm)
     addEventListener("load", sizeChangeForm)
+
+    // mini 1
+
+    formMini1 = document.getElementById("miniForm1");
+    formImageMini1 = document.getElementById("formBgMini1");
+    formInputMini1 = document.getElementById("emojifyMini1");
+
+    function sizeChangeFormMini1() {
+        const dimInput = formInputMini1.getBoundingClientRect()
+
+        formInputMini1.style.width = formImageMini1.offsetWidth*0.95 + "px"
+        formInputMini1.style.right = dimInput.right + dimInput.right*0.15 + "px"
+        // oh, this one actually does nothing too but the whole thing. I think.
+
+        formInputMini1.style.height = formImageMini1.offsetHeight*0.88 + "px"
+        formInputMini1.style.bottom = dimInput.bottom + dimInput.bottom*0.06 + "px"
+    }
+
+    addEventListener("resize", sizeChangeFormMini1)
+    addEventListener("load", sizeChangeFormMini1)
+
+    // mini 2
+
+    formMini2 = document.getElementById("miniForm2");
+    formImageMini2 = document.getElementById("formBgMini2");
+    formInputMini2 = document.getElementById("emojifyMini2");
+
+    function sizeChangeFormMini2() {
+        const dimInput = formInputMini2.getBoundingClientRect()
+
+        formInputMini2.style.width = formImageMini2.offsetWidth*0.95 + "px"
+        formInputMini2.style.right = dimInput.right + dimInput.right*0.15 + "px"
+        // oh, this one actually does nothing too but the whole thing. I think.
+
+        formInputMini2.style.height = formImageMini2.offsetHeight*0.88 + "px"
+        formInputMini2.style.bottom = dimInput.bottom + dimInput.bottom*0.06 + "px"
+    }
+
+    addEventListener("resize", sizeChangeFormMini1)
+    addEventListener("load", sizeChangeFormMini1)
 </script>
+<!--⪢⪢⪢ Responsive script for video anim -->
+
+<!--⪢⪢⪢ Caret blink disappear + proper waiting functions -->
+<script>
+    const caret = document.getElementById("caret")
+    const caretMini1 = document.getElementById("caretMini1")
+    const caretMini2 = document.getElementById("caretMini2")
+    let youMayPass = false
+
+    if (localStorage.isOn === "false") {
+        youMayPass = true
+        caretMini1.style.opacity = "100%"
+        caretMini2.style.opacity = "100%"
+
+        formInputMini1.readOnly = false
+
+        formInputMini1.style.color = "white"
+        formInputMini2.style.color = "white"
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function delayedBlink() {
+        await sleep(500);
+        caret.style.opacity = "100%"
+    }
+
+    async function delayedBlinkMini1() {
+        await sleep(500);
+        caretMini1.style.opacity = "100%"
+    }
+    async function delayedBlinkMini2() {
+        await sleep(500);
+        caretMini2.style.opacity = "100%"
+    }
+
+    async function delayedAppearance() {
+        formInput.style.animation="textBlink .2s linear alternate infinite"
+        formInputMini1.value = formInput.value
+
+        await sleep(3000)
+        animVid.style.display = "block";
+        form.style.display = "none";
+        animVid.play();
+        animVid.style.animation = "animTransition 4s linear forwards 4s";
+
+        await sleep(5400);
+        formMini1.style.display = "initial"
+        animVid.style.animation="animBlink 4s linear forwards";
+        formMini2.style.display = "initial"
+
+
+        localStorage.isOn = false
+
+        await sleep(5400);
+        youMayPass = true
+
+        caretMini1.style.animation = "caretBlink .5s alternate infinite"
+        caretMini2.style.animation = "caretBlink .5s alternate infinite"
+
+        formInputMini1.style.animation="textBlink .4s linear alternate 3"
+        formInputMini2.style.animation="textBlink .4s linear alternate-reverse 3 forwards"
+        formInputMini1.style.color = "white"
+
+        formInputMini1.readOnly = false
+
+        if (formInputMini1.value === "") {
+            caretMini1.style.animation = "none"
+            caretMini2.style.animation = "none"
+
+            caretMini1.offsetHeight;
+            caretMini2.offsetHeight;
+
+            caretMini1.style.animation = "caretBlink .5s alternate infinite"
+            caretMini2.style.animation = "caretBlink .5s alternate infinite"
+            // resets the anim so they're in sync
+
+            caretMini1.style.opacity = "100%"
+            caretMini2.style.opacity = "100%"
+        }
+    }
+
+    function vanish() {
+        if (document.activeElement === formInput) {
+            caret.style.opacity = "0"
+        } else {
+            if (formInput.value === "") {
+                delayedBlink()
+            }
+        }
+    }
+
+    function vanishMini1() {
+        if (document.activeElement === formInputMini1) {
+            caretMini1.style.opacity = "0"
+        } else {
+            if (formInputMini1.value === "" && youMayPass === true) {
+                delayedBlinkMini1()
+            }
+        }
+    }
+
+    function vanishMini2() {
+        if (document.activeElement === formInputMini2) {
+            caretMini2.style.opacity = "0"
+        } else {
+            if (formInputMini2.value === "" && youMayPass === true) {
+                delayedBlinkMini2()
+            }
+        }
+    }
+
+    addEventListener("click", vanish)
+    addEventListener("click", vanishMini1)
+    addEventListener("click", vanishMini2)
+</script>
+
 
 <!--⪢⪢⪢ Ignore me -->
 <py-script>
 import json
 import time
+import re
+
 from js import localStorage, document, console, XMLHttpRequest
 
 def passTxt():
@@ -76,9 +309,6 @@ def passTxt():
     from js import thePrompt
 
     bearer = "Bearer " + localStorage.getItem("openAI")
-
-    promptDiv = document.getElementById("prompt")
-    promptDiv.innerHTML = "<h3>Prompt: </h3>\"" + thePrompt + "\"<hr/>"
 
     engine = "text-davinci-003"
 
@@ -92,7 +322,7 @@ def passTxt():
     data = json.dumps({
         "model": engine,
         "prompt": theNeatPrompt,
-        "max_tokens": 1000,
+        "max_tokens": 550,
         "temperature": 0.3,
         "top_p": 0.3,
         "frequency_penalty": 1.2,
@@ -103,10 +333,30 @@ def passTxt():
 
     json_response = json.loads(xhr.response)
     completion_text = json_response['choices'][0]['text']
-    console.log("Colors: " + completion_text)
 
-    completionDiv = document.getElementById("completion")
-    completionDiv.innerHTML = "<h3>OpenAI (" + engine + ") Response: </h3>\"" + completion_text.strip() + "\""
+    completionDiv = document.getElementById("emojifyMini2")
+
+    input_string = completion_text.strip()
+
+    ifTextOnly = False
+
+    m = re.compile(r'[a-zA-Z0-9()_/., "]*$')
+    if m.match(input_string):
+        ifTextOnly = True
+    else:
+        blankPrompt = []
+        for i in input_string:
+            doAppend = True
+            if not re.search(r'[^a-zA-Z0-9()_/., "]', i):
+                doAppend = False
+            if doAppend:
+                blankPrompt.append(i)
+    beautifiedPrompt = ''.join(str(p) for p in blankPrompt)
+    if ifTextOnly == False:
+        completionDiv.value = beautifiedPrompt.strip()
+    else:
+        completionDiv.value = "AI either provided no response or it was only text, change you prompt."
+    console.log("completionDiv.value")
 </py-script>
 </body>
 </html>
