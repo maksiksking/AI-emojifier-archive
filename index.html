@@ -39,6 +39,9 @@
     </video>
 </div>
 
+<!-- ⪢⪢⪢ Tooltips-->
+<div id="tooltipDiv">You will be put here next time you visit</div>
+
 <!-- ⪢⪢⪢ First (main page) form-->
 <div id="mainForm">
     <textarea id="emojify" name="main"></textarea><br><br>
@@ -133,6 +136,7 @@
 
     function ifAlreadyClicked() {
         if (localStorage.isOn === "false") {
+            tooltip.textContent = "Hello there! 🌌👋"
             footer.style.display = "flex"
             footer.style.bottom = "0"
             headingTxt.src = "gallery/alrPageTxtReal.webp"
@@ -142,15 +146,16 @@
             formMini1.style.display = "initial"
             formMini2.style.display = "initial"
 
-            formMini1.style.top = "43%"
-            formMini2.style.top = "43%"
+            formMini1.style.top = "47%"
+            formMini2.style.top = "47%"
 
-            mainButton.style.top = "76vh"
-            buttonTxt.style.top = "76vh"
+            mainButton.style.top = "79vh"
+            buttonTxt.style.top = "79vh"
 
             caretMini1.style.animation = "caretBlink .5s alternate infinite"
             caretMini2.style.animation = "caretBlink .5s alternate infinite"
-            console.log(caretMini1.style.animation)
+
+            tooltip.style.opacity = "100%"
         }
         else {
             console.log("not replaced")
@@ -270,6 +275,11 @@
         headingTxt.style.animation = "txtAnimTo 3s linear forwards"
     }
 
+    async function executeIn() {
+        await sleep(2000)
+        swipSwap()
+    }
+
     async function delayedAppearance() {
         formInput.style.animation="textBlink .2s linear alternate infinite"
         formInputMini1.value = formInput.value
@@ -321,6 +331,7 @@
 
         footer.style.display = "flex"
         footer.style.animation = "footerPopping 3s forwards ease-in-out"
+        tooltip.style.opacity = "100%"
     }
 
     function vanish() {
@@ -375,6 +386,75 @@
     discordTxt.addEventListener("click", discordCopy)
 </script>
 
+<!--⪢⪢⪢ Tooltip handler -->
+<script>
+    const tooltip = document.getElementById("tooltipDiv")
+    let random
+
+    let slowdown = false
+
+    tooltip.style.width = "43vw"
+
+
+
+
+    const tooltips = [
+        "Tip: If AI generates nothing, try adding \"In emoji\" to your prompt.",
+        "Tip: You can use command prompts like \"Explain the script of bee movie\".",
+        "Tip: The response is too short? Try \"Keep your response bigger\".",
+        "Tip: You can use modificators. Try adding \"But every second emoji is a taco\" to a prompt.",
+        // "Vice-versa mode allows you to transform emoji into text. It's really bad at it.",
+        "Tip: Did you know? Text based AI is basically a hypercharged autocomplete with a brain like picking mechanism.",
+        "Tip: If you enter nothing, a random prompt is generated.",
+        "Tip: One day it generated me this funky thing 📈⃣⃣⃣⃣",
+        "Plug: Running this website is not free and these 2 ads don't make enough, consider becoming a Ko-Fi supporter.",
+        "Thank you for visiting, random stranger on the internet.",
+        "Tip: 🥐🔪🥐🔪🥐🔪🥐🔪 😨 🤖🤖⬅️👿",
+        "Tip: Someone stole all my cookies. One of them did something special on click",
+        "Plug: Check out my social media at the bottom of the page.",
+        "Tip: This website is 1200+ lines of code in total.",
+        "Tip: Have a nice day. Seriously, just have a nice day whoever you are.",
+        "Support the heroes of Ukraine 🌻, let's end this war together! <a href='https://savelife.in.ua'>💙 savelife.in.ua 💛</a>"
+    ]
+
+    function swipSwap(isOnLoad) {
+        const oldRandom = random
+
+        random = Math.floor(Math.random() * 15);
+        while (oldRandom === random) {
+            random = Math.floor(Math.random() * 15);
+        }
+
+        if (isOnLoad !== undefined) {
+            executeIn()
+            return
+        }
+
+        if (random === 4 || random === 7) {
+            if (tooltip.style.width === "43vw") {
+                tooltip.style.width = tooltip.offsetWidth * 1.3 + "px"
+                slowdown = true
+            }
+        }
+        else {
+            tooltip.style.width = "43vw"
+        }
+
+        if (slowdown === true) {
+            setTimeout(() => {
+                tooltip.innerHTML = tooltips[random]
+                slowdown = false
+            },1000)
+        } else {
+            tooltip.innerHTML = tooltips[random]
+        }
+    }
+
+    setInterval(swipSwap, 10000)
+    addEventListener("load", swipSwap, true)
+</script>
+
+
 <!--⪢⪢⪢ Ignore me -->
 <py-script>
 import json
@@ -398,15 +478,26 @@ def passTxt():
 
     theNeatPrompt = f'You are a program that converts text into emoji. You are not permitted to use text characters. Do not write any text, just emojies. Again, you are not permitted to use any characters other than emoji even for comment. \n For example: "Crab ate a sock an appeared on an island in India under green sun" you convert it to "🦀🍽️🧦🏝️🇮🇳🌞" \n Now turn this into emoji: {thePrompt}'
 
-    data = json.dumps({
-        "model": engine,
-        "prompt": theNeatPrompt,
-        "max_tokens": 550,
-        "temperature": 0.3,
-        "top_p": 0.3,
-        "frequency_penalty": 1.2,
-        "presence_penalty": 1
-    })
+    if thePrompt == "":
+        data = json.dumps({
+            "model": engine,
+            "prompt": theNeatPrompt,
+            "max_tokens": 550,
+            "temperature": 1.6,
+            "top_p": 0.3,
+            "frequency_penalty": 1.2,
+            "presence_penalty": 1
+        })
+    else:
+        data = json.dumps({
+            "model": engine,
+            "prompt": theNeatPrompt,
+            "max_tokens": 550,
+            "temperature": 0.3,
+            "top_p": 0.3,
+            "frequency_penalty": 1.2,
+            "presence_penalty": 1
+        })
 
     xhr.send(data)
 
