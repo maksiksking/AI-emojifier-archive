@@ -5,7 +5,7 @@
 }
 
 html {
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: clip;
   background-image: url("gallery/bg1.jpeg");
   background-size: cover;
@@ -80,14 +80,27 @@ html {
 
 #icon {
   margin-left: 5%;
-  margin-top: 1%;
-  transform: scale(1.2);
+  margin-top: 5%;
+  width: 13vh;
   transition: all 0.75s 0ms;
   // the image is lowq smh
 }
 
 #icon:hover {
-  transform: scale(1.3);
+  transform: scale(1.1);
+}
+
+#ko-fiIcon {
+  position: absolute;
+  left: 70%;
+  margin-top: -4.3%;
+  width: 22vh;
+  transition: all 0.75s 0ms;
+  z-index: 999;
+}
+
+#ko-fiIcon:hover {
+  transform: scale(1.1);
 }
 
 #header {
@@ -100,13 +113,45 @@ html {
   height: 20vh;
   z-index: 1005;
   transition: all 0.75s 0ms;
-  li {
-    a {
-      text-decoration: none;
-      color: white;
-      font-family: Proza Libre, sans-serif;
+  ul {
+    margin-left: 5%;
+    li {
+      display: inline-block;
+      a {
+        transition: all 0.75s 0ms;
+        text-decoration: none;
+        color: white;
+        font-family: Proza Libre, sans-serif;
+      }
+      a:hover {
+        transform: scale(1.1);
+      }
     }
   }
+}
+
+#nameText {
+  position: absolute;
+  top: 14%;
+  margin-left: 2%;
+  transition: all 0.75s 0ms;
+  font-size: 3.3vw;
+}
+
+#nameText:hover {
+  transform: scale(1.1);
+}
+
+#contactText {
+  transition: all 0.75s 0ms;
+  position: absolute;
+  top: 20%;
+  margin-left: 73%;
+  font-size: 2.5vw;
+}
+
+#contactText:hover {
+  transform: scale(1.1);
 }
 
 // Yoinked scroll bar
@@ -303,6 +348,7 @@ h1 {
   display: none;
 
   textarea {
+    cursor: not-allowed;
     box-sizing: border-box;
     background-color: transparent;
     color: transparent;
@@ -334,4 +380,225 @@ h1 {
 #formBgMini2 {
   pointer-events: none;
   width: 39.8vw;
+}
+
+@keyframes txtAnim {
+  0% {
+    top: 32%;
+    opacity: 100%;
+  }
+  80% {
+    opacity: 80%;
+    top: 32%;
+    filter: blur(5px);
+  }
+  87% {
+    top: 32%;
+  }
+  90% {
+   opacity: 70%;
+    top: 18%;
+  }
+  100% {
+    opacity: 0;
+    top: 22%;
+  }
+}
+
+@keyframes txtAnimTo {
+  0% {
+    top: 40%;
+    opacity: 60%;
+    filter: blur(3px);
+  }
+  80% {
+    opacity: 70%;
+    top: 30%;
+    filter: blur(5px);
+  }
+  82% {
+    top: 28%;
+  }
+  90% {
+    opacity: 90%;
+    top: 24%;
+  }
+  100% {
+    opacity: 100%;
+    top: 24%;
+    filter: blur(0);
+  }
+}
+
+@keyframes formiesUp {
+  from {
+    top: 55%;
+  }
+  to {
+    top: 43%;
+  }
+}
+
+@keyframes buttonUp {
+  from {
+    top: 88vh;
+  }
+  to {
+    top: 76vh;
+  }
+}
+
+#footerContainer {
+  display: none;
+  position: absolute;
+  bottom: -20%;
+  width: 100%;
+  height: 15%;
+  align-items: center;
+}
+
+#logoContainer {
+  position: absolute;
+  display: flex;
+  width: 50%;
+  height: 100%;
+  align-items: center;
+  left: 6%;
+  div {
+    a {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+#emailTxt {
+  color: #FFF;
+  font-family: Proza Libre, sans-serif;
+  font-size: 1.2vw;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  z-index: 0;
+  margin-top: 1%;
+  margin-left: 2.5%;
+  cursor: pointer;
+}
+
+#footerTxtContainer {
+  height: 60%;
+  display: flex;
+  width: 19%;
+  inset: 0;
+  margin-left: 70%;
+  align-items: center;
+  transition: all 0.75s;
+}
+
+#footerTxt {
+  color: #FFF;
+  font-family: Proza Libre, sans-serif;
+  font-size: 2.2vw;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  z-index: 1;
+  pointer-events: initial !important;
+}
+
+#footerTxtContainer:hover {
+  margin-left: 50%;
+  width: 40%;
+}
+
+#line {
+  position: absolute;
+  background: #FFF;
+  box-shadow: 0 15px 9px 0 rgba(0, 0, 0, 0.25);
+  width: 87.6%;
+  height: 2%;
+  left: 50%;
+  top: 5%;
+  transform: translate(-50%, -50%);
+}
+
+.logos {
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-size: 100% 100%;
+  height: 42%;
+  width: 6.8%;
+  margin-left: 2%;
+}
+
+#youtubeLogo {
+  background-image: url("gallery/youtube.svg");
+}
+#twitterLogo {
+  background-image: url("gallery/twitter.svg");
+}
+#xLogo {
+  background-image: url("gallery/nex.svg");
+  position: absolute;
+  z-index: 999;
+  margin-left: 3%;
+  top: 50%;
+}
+#githubLogo {
+  background-image: url("gallery/github.svg");
+  background-position-x: center;
+  background-size: 120% 120% !important;
+}
+#discordLogo {
+  display: flex;
+  background-image: url("gallery/discord.svg");
+  margin-top: -1%;
+  align-items: center;
+  justify-content: center;
+  p {
+    position: absolute;
+    color: #FFF;
+    font-family: Proza Libre, sans-serif;
+    font-size: 1vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    z-index: 1001;
+    top: 70%;
+    cursor: pointer;
+  }
+}
+
+#blobHideout {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  left: 80%;
+  opacity: 0;
+  transition: all 0.75ms 0.2s;
+  z-index: 0;
+  text-align: center;
+  color: #FFF;
+  font-family: Proza Libre, sans-serif;
+  font-size: 1vw;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+#footerTxtContainer:hover #blobHideout {
+  opacity: 100%;
+}
+
+@keyframes footerPopping {
+  0% {
+    bottom: -20%;
+  }
+  97% {
+    bottom: 1%;
+  }
+  100% {
+    bottom: 0;
+  }
 }

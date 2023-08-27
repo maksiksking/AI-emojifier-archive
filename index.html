@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xml:lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Language" content="en">
     <title>Title</title>
     <link rel="stylesheet" href="pyScript/pyscriptCSS.css" />
     <script defer src="https://pyscript.net/latest/pyscript.js"></script>
@@ -18,12 +19,14 @@
 <body>
 <!-- ⪢⪢⪢ Header-->
 <div id="header">
-    <img src="gallery/mainLogo.svg" id="icon" alt="oh" draggable="false">
     <ul>
-        <li id="contactText"><a href="">Contact</a></li>
+        <li><a href="index.html"><img src="gallery/mainLogo.svg" id="icon" alt="oh" draggable="false"></a></li>
+        <li id="nameText"><a id="ntxTxtLnk" href="index.html">AI-emojify</a></li>
+        <li><a id="ko-fiLink" href="https://ko-fi.com/maksiks"><img src="gallery/Ko-fi.svg" id="ko-fiIcon" alt="oh" draggable="false"></a></li>
+        <li id="contactText"><a id="ctcTxtLnk" href="">contact</a></li>
         <!-- Insert the contact page-->
-        <!--    Also a friendly reminder to add the arrow-->
-        <li id="nameText"><a href="index.html">AI-emojify</a></li>
+        <!-- Also a friendly reminder to add the arrow-->
+        <!-- maybe add a prompt log-->
     </ul>
 </div>
 
@@ -57,37 +60,71 @@
 
 <!-- ⪢⪢⪢ Main transfer button -->
 <button py-click="passTxt()" id="mainButton" class="py-button"></button>
-<h1>emojify!</h1>
+<h1 id="buttonTxt">emojify!</h1>
+
+<!--⪢⪢⪢ Footer -->
+<div id="footerContainer">
+    <div id="line"></div>
+    <div id="logoContainer">
+        <div class="logos" id="youtubeLogo"><a href="https://www.youtube.com/channel/UCtPK7NNErHRXL7pZk0VflLA"></a></div>
+        <div class="logos" id="twitterLogo">
+            <a href="https://twitter.com/maksiksq"></a>
+            <div class="logos" id="xLogo"><a href="https://twitter.com/maksiksq"></a></div>
+        </div>
+        <div class="logos" id="githubLogo"><a href="https://github.com/maksiksking"></a></div>
+        <div class="logos" id="discordLogo">
+            <p id="discordTxt">@maksiks</p>
+            <a href="https://discord.com"></a>
+        </div>
+        <p id="emailTxt">maksiks.touch@gmail.com</p>
+    </div>
+    <div id="footerTxtContainer">
+        <p id="footerTxt">Made by Maksiks</p>
+        <p id="blobHideout"><img src="gallery/blobDevour.gif" alt="blob nom nom YEEE" width="22vh" height="22vh">
+            <img src="gallery/blobDevour.gif" alt="blob nom nom YEEE" width="22vh" height="22vh">
+            <img src="gallery/blobDevour.gif" alt="blob nom nom YEEE" width="22vh" height="22vh">
+            <img src="gallery/blobDevour.gif" alt="blob nom nom YEEE" width="22vh" height="22vh">
+            <img src="gallery/blobDevour.gif" alt="blob nom nom YEEE" width="22vh" height="22vh">
+            <img src="gallery/blobDevour.gif" alt="blob nom nom YEEE" width="22vh" height="22vh">
+            <img src="gallery/blobDevour.gif" alt="blob nom nom YEEE" width="22vh" height="22vh">
+            <br>Have a cookie! -><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUXbmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA%3D">🍪</a><-</p>
+    </div>
+</div>
+
 
 <!-- ⪢⪢⪢ Conversion script (first one) + video box anim handler -->
 <script>
     mainButton = document.getElementById("mainButton");
     theForm = document.getElementById("emojify");
     animVid = document.getElementById("animBoxes");
+    headingTxt = document.getElementById("mainTxt")
+    buttonTxt = document.getElementById("buttonTxt")
+    footer = document.getElementById("footerContainer")
 
     mainButton.addEventListener("click", () => {
         if (localStorage.isOn === "true" || localStorage.isOn === undefined) {
-            // thePrompt = theForm.value
+            thePrompt = theForm.value
             caretMini1.style.opacity = "0"
             caretMini2.style.opacity = "0"
 
-            // return thePrompt
+            return thePrompt
         }
     })
 
     mainButton.addEventListener("click", () => {
         if (localStorage.isOn === "false") {
-            // thePrompt = formInputMini1.value
+            thePrompt = formInputMini1.value
             caretMini1.style.opacity = "0"
             caretMini2.style.opacity = "0"
 
-            // return thePrompt
+            return thePrompt
         }
     })
 
     mainButton.addEventListener("click", () => {
         if (localStorage.isOn === "true" || localStorage.isOn === undefined) {
             delayedAppearance()
+            textAnim()
         }
         else {
             console.log("You've already seen this animation")
@@ -96,9 +133,20 @@
 
     function ifAlreadyClicked() {
         if (localStorage.isOn === "false") {
+            footer.style.display = "flex"
+            footer.style.bottom = "0"
+            headingTxt.src = "gallery/alrPageTxtReal.webp"
+            headingTxt.style.top = "24%"
+
             form.style.display = "none";
             formMini1.style.display = "initial"
             formMini2.style.display = "initial"
+
+            formMini1.style.top = "43%"
+            formMini2.style.top = "43%"
+
+            mainButton.style.top = "76vh"
+            buttonTxt.style.top = "76vh"
 
             caretMini1.style.animation = "caretBlink .5s alternate infinite"
             caretMini2.style.animation = "caretBlink .5s alternate infinite"
@@ -214,6 +262,14 @@
         caretMini2.style.opacity = "100%"
     }
 
+    async function textAnim() {
+        await sleep(4000)
+        headingTxt.style.animation = "txtAnim 4s linear forwards"
+        await sleep(4000)
+        headingTxt.src = "gallery/alrPageTxt.webp"
+        headingTxt.style.animation = "txtAnimTo 3s linear forwards"
+    }
+
     async function delayedAppearance() {
         formInput.style.animation="textBlink .2s linear alternate infinite"
         formInputMini1.value = formInput.value
@@ -228,7 +284,6 @@
         formMini1.style.display = "initial"
         animVid.style.animation="animBlink 4s linear forwards";
         formMini2.style.display = "initial"
-
 
         localStorage.isOn = false
 
@@ -258,6 +313,14 @@
             caretMini1.style.opacity = "100%"
             caretMini2.style.opacity = "100%"
         }
+
+        formMini1.style.animation = "formiesUp 2s ease-in-out forwards"
+        formMini2.style.animation = "formiesUp 2s ease-in-out forwards"
+        mainButton.style.animation = "buttonUp 2s ease-in-out forwards"
+        buttonTxt.style.animation = "buttonUp 2s ease-in-out forwards"
+
+        footer.style.display = "flex"
+        footer.style.animation = "footerPopping 3s forwards ease-in-out"
     }
 
     function vanish() {
@@ -295,6 +358,22 @@
     addEventListener("click", vanishMini2)
 </script>
 
+<!-- ⪢⪢⪢ Footer copy -->
+<script>
+    const emailTxt = document.getElementById("emailTxt")
+    const discordTxt = document.getElementById("discordTxt")
+
+    function emailCopy() {
+        navigator.clipboard.writeText("maksiks.touch@gmail.com");
+    }
+
+    function discordCopy() {
+        navigator.clipboard.writeText("@maksiks");
+    }
+
+    emailTxt.addEventListener("click", emailCopy)
+    discordTxt.addEventListener("click", discordCopy)
+</script>
 
 <!--⪢⪢⪢ Ignore me -->
 <py-script>
